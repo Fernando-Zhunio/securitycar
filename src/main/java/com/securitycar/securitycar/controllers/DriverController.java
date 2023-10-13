@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.securitycar.securitycar.dtos.Driver.RequestDriverDto;
 import com.securitycar.securitycar.services.DriverService;
 
 @RestController
@@ -37,7 +38,7 @@ public class DriverController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> create(@RequestBody Dto dto) {
+    public ResponseEntity<?> create(@RequestBody RequestDriverDto dto) {
         try {
 
             return new ResponseEntity<>("Create Result", HttpStatus.OK);

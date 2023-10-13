@@ -4,6 +4,7 @@
  */
 package com.securitycar.securitycar.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,17 +12,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
+// import org.springframework.security.core.userdetails.User;
+// import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+// import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import core.users.services.UserDetailsServiceImpl;
 
 /**
  *
@@ -30,23 +32,33 @@ import org.springframework.web.filter.CorsFilter;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    @Bean
-    public InMemoryUserDetailsManager userDetailService() {
-        UserDetails user1 = User.withUsername("fzhunio@novicompu.com")
-                .password("{noop}fernando1991")
-                .roles("USER")
-                .build();
 
-        UserDetails user2 = User.withUsername("fzhunio@hotmail.com")
-                .password("{noop}fernando1991")
-                .roles("USER", "ADMIN")
-                .build();
-        UserDetails[] users = { user1, user2 };
-        return new InMemoryUserDetailsManager(users);
-    }
+    @Autowired
+    private JwtUtils jwtUtils;
+    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
+    // @Bean
+    // public InMemoryUserDetailsManager userDetailService() {
+    // UserDetails user1 = User.withUsername("fzhunio@novicompu.com")
+    // .password("{noop}fernando1991")
+    // .roles("USER")
+    // .build();
+
+    // UserDetails user2 = User.withUsername("fzhunio@hotmail.com")
+    // .password("{noop}fernando1991")
+    // .roles("USER", "ADMIN")
+    // .build();
+    // UserDetails[] users = { user1, user2 };
+    // return new InMemoryUserDetailsManager(users);
+    // }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager)
+            throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(jwtUtils);
+        jwtAuthenticationFilter.setAuthenticationManager(authenticationManager);
+        jwtAuthenticationFilter.setFilterProcessesUrl("authentication/login");
+
         http.authorizeHttpRequests(
                 auth -> {
                     auth.requestMatchers("@/v1/").authenticated();
@@ -62,11 +74,12 @@ public class SecurityConfig {
         // });
         http.sessionManagement(session -> {
             session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+
             // session.invalidSessionUrl("/authentication/login");
             session.maximumSessions(2);
             session.sessionFixation().migrateSession();
             session.invalidSessionUrl("/authentication/login");
-        });
+        }).addFilter(jwtAuthenticationFilter);
 
         // http.httpBasic(basic -> {
         // basic.realmName("SecurityCar");
@@ -92,7 +105,7 @@ public class SecurityConfig {
     AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder)
             throws Exception {
         AuthenticationManagerBuilder config = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
-        config.userDetailsService(userDetailService()).passwordEncoder(passwordEncoder);
+        config.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
         return config.build();
     }
 

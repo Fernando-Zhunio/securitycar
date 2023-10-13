@@ -12,12 +12,16 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
+import lombok.Data;
 import jakarta.persistence.JoinColumn;
 import java.io.Serializable;
 import java.util.Set;
 
+import com.securitycar.securitycar.models.RoleEntity;
+
 @Entity
 @Builder
+@Data
 @Table(name = "user")
 public class UserEntity implements Serializable {
     @Id
