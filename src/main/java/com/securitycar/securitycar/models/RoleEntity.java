@@ -5,6 +5,8 @@ import java.io.Serializable;
 import com.securitycar.securitycar.util.RoleEnum;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,7 +27,7 @@ public class RoleEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+    @Enumerated(EnumType.STRING)
     private RoleEnum name;
 
 }

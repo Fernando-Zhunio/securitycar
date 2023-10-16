@@ -4,9 +4,8 @@
  */
 package com.securitycar.securitycar.services;
 
+import com.securitycar.securitycar.core.driver.domain.Driver;
 import com.securitycar.securitycar.repositories.DriverRepository;
-
-import core.driver.domain.Driver;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

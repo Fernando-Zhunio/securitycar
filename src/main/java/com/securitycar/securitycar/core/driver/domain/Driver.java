@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package core.driver.domain;
+package com.securitycar.securitycar.core.driver.domain;
 
 // import jakarta.annotation.Nonnull;
 import jakarta.persistence.CascadeType;

@@ -6,7 +6,7 @@ package com.securitycar.securitycar.services;
 
 import java.util.List;
 
-import core.driver.domain.Driver;
+import com.securitycar.securitycar.core.driver.domain.Driver;
 
 /**
  *

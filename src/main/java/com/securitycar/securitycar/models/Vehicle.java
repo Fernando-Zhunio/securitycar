@@ -12,7 +12,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import java.util.Date;
 
-import core.driver.domain.Driver;
+import com.securitycar.securitycar.core.driver.domain.Driver;
+
 import lombok.Data;
 
 /**

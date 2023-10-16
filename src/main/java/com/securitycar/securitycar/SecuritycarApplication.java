@@ -9,17 +9,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.securitycar.securitycar.core.users.domain.UserEntity;
 import com.securitycar.securitycar.models.RoleEntity;
 import com.securitycar.securitycar.repositories.UserRepository;
 import com.securitycar.securitycar.util.RoleEnum;
 
-import core.users.domain.UserEntity;
-
 @SpringBootApplication
 public class SecuritycarApplication {
 
-	// @Autowired
-	// PasswordEncoder passwordEncoder;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	@Autowired
 	UserRepository userRepository;
 
@@ -32,9 +31,11 @@ public class SecuritycarApplication {
 		return args -> {
 			UserEntity user = UserEntity.builder()
 					.email("fzhunio@novicompu.com")
-					.password("fernando1991")
+					.username("fernando")
+					.password(passwordEncoder.encode("fernando1991"))
 					.roles(Set.of(RoleEntity.builder()
-							.name(RoleEnum.valueOf(RoleEnum.CUSTOMER.name())).build()))
+							.name(RoleEnum.valueOf(RoleEnum.ADMIN.name()))
+							.build()))
 					.build();
 
 			userRepository.save(user);

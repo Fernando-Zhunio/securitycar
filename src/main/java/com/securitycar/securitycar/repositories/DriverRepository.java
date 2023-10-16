@@ -6,7 +6,7 @@ package com.securitycar.securitycar.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import core.driver.domain.Driver;
+import com.securitycar.securitycar.core.driver.domain.Driver;
 
 /**
  *

@@ -1,7 +1,7 @@
 package com.securitycar.securitycar.config;
 
-import java.security.Key;
 import java.util.Date;
+import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
@@ -10,11 +10,8 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.MacAlgorithm;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
 
 @Component
 public class JwtUtils {
@@ -50,12 +47,14 @@ public class JwtUtils {
                 .getPayload();
     }
 
-    // public String getClaims(String token, String key) {
-    // return Jwts.parser()
-    // .verifyWith(getSignatureKey())
-    // .build().parseSignedClaims(token)
-    // .getBody();
-    // }
+    public String getUsernameFromToken(String token) {
+        return getClaim(token, Claims::getSubject);
+    }
+
+    public <T> T getClaim(String token, Function<Claims, T> claimsFuntions) {
+        Claims claims = allClaims(token);
+        return claimsFuntions.apply(claims);
+    }
 
     public SecretKey getSignatureKey() {
         byte[] keysBytes = Decoders.BASE64.decode(secretKey);
